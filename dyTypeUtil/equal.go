@@ -1,10 +1,14 @@
-package dyEqual
+package dyTypeUtil
+
+import "reflect"
 
 //动态判断是否匹配，基础数据类型自动转换，
 func Equal(src interface{}, dest interface{}) bool {
 	srcKind := getKind(src)
 	destKind := getKind(dest)
-	if srcKind == destKind {
+
+	//类型一样直接匹配，除非是浮点数，因为浮点判断是算最小差
+	if srcKind == destKind && srcKind != reflect.Float32 && srcKind != reflect.Float64 {
 		return src == dest
 	}
 
