@@ -12,9 +12,12 @@ import (
 	"strings"
 )
 
-func AssignValue(instance interface{}, path string, val interface{}) (bool, error) {
+func AssignValue(instance interface{}, path string, val interface{}, cached bool) (bool, error) {
 	path = strings.TrimSpace(path)
 	paths := strings.Split(path, ".")
+	if cached {
+		return assignByPathsCached(instance, paths, val)
+	}
 	return assignByPaths(instance, paths, val)
 }
 
@@ -66,36 +69,4 @@ func assignByPaths(instance interface{}, paths []string, val interface{}) (bool,
 	}
 
 	return false, nil
-}
-
-func getValuePtr(field reflect.Value) interface{} {
-	kind := field.Kind()
-	if kind != reflect.Ptr && kind != reflect.Interface {
-		field = field.Addr()
-	}
-	return field.Interface()
-}
-
-//结构相同则直接赋值，不同则尝试转换赋值，转换仅限于基础数据类型的int string
-func assignFieldValue(value reflect.Value, field *reflect.StructField, setVal interface{}) error {
-	if !value.CanSet() {
-		return fmt.Errorf("%s can not set value", field.Name)
-	}
-	//fmt.Println("offset", field.Offset)
-	//fmt.Println("PkgPath", field.PkgPath)
-	targetValue := reflect.ValueOf(setVal)
-	targetValType := targetValue.Type()
-
-	//fmt.Println(targetValType)
-	//fmt.Println(field.Type)
-	if targetValType == field.Type {
-		value.Set(targetValue)
-		return nil
-	} else {
-		err := convertAssign(field.Type, value, setVal)
-		if err != nil {
-			return err
-		}
-		return nil
-	}
 }
