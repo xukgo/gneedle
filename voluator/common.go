@@ -8,11 +8,22 @@ package voluator
 
 import (
 	"fmt"
+	"log"
 	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
 )
+
+func combindPathString(pkg, name string)string{
+	len1 := len(pkg)
+	len2 := len(name)
+	buff := make([]byte,len1+len2+1)
+	copy(buff, pkg)
+	buff[len1] = '.'
+	copy(buff[len1+1:], name)
+	return string(buff)
+}
 
 func GetClassPath(v interface{}) string {
 	tp := reflect.TypeOf(v)
@@ -21,7 +32,7 @@ func GetClassPath(v interface{}) string {
 		tp = tp.Elem()
 	}
 	//return tp.String() //这个是包名+结构体名，比较短
-	return strings.Join([]string{tp.PkgPath(), tp.Name()}, ".") //这个是全部包名路径，有点长
+	return combindPathString(tp.PkgPath(), tp.Name()) //这个是全部包名路径，有点长
 }
 
 func getFieldFlagName(fieldInfo reflect.StructField) string {
@@ -47,6 +58,7 @@ func getFlagAndSliceIndex(str string) (string, int) {
 	sliceIdxStr := str[idx1+1 : idx2]
 	sliceIdx, err := strconv.Atoi(sliceIdxStr)
 	if err != nil {
+		log.Printf("getFlagAndSliceIndex parse url format error,%s\r\n",str)
 		return str[:idx1], -1
 	}
 	return str[:idx1], sliceIdx

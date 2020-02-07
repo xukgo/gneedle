@@ -2,10 +2,12 @@ package dyTypeUtil
 
 import (
 	"fmt"
+	"math"
 	"strconv"
+	"strings"
 )
 
-//支持基础数据类型自动转换，不支持bool byteArray，只支持数值和string
+//支持基础数据类型自动转换，不支持 byteArray，只支持数值和string/bool
 func ConvertBasicTypeData(src interface{}, dest interface{}) (interface{}, error) {
 	srcKind := getKind(src)
 	destKind := getKind(dest)
@@ -14,12 +16,28 @@ func ConvertBasicTypeData(src interface{}, dest interface{}) (interface{}, error
 	}
 
 	srcKindType := getValueKindType(src)
-	if srcKindType == UNSUPPORT_TYPE || srcKindType == BOOL_TYPE || srcKindType == BYTEARRAY_TYPE {
+	if srcKindType == UNSUPPORT_TYPE || srcKindType == BYTEARRAY_TYPE {
 		return nil, fmt.Errorf("unsupport type")
 	}
 	destKindType := getValueKindType(dest)
-	if destKindType == UNSUPPORT_TYPE || destKindType == BOOL_TYPE || destKindType == BYTEARRAY_TYPE {
+	if destKindType == UNSUPPORT_TYPE || destKindType == BYTEARRAY_TYPE {
 		return nil, fmt.Errorf("unsupport type")
+	}
+
+	if checkIsBoolAndString(srcKindType, destKindType) {
+		if srcKindType == BOOL_TYPE {
+			return convertBoolToString(src.(bool)), nil
+		} else {
+			return convertStringToBool(src.(string)), nil
+		}
+	}
+
+	if checkIsBoolAndNumber(srcKindType, destKindType) {
+		if srcKindType == BOOL_TYPE {
+			return convertBoolToNumber(src.(bool), dest)
+		} else {
+			return convertNumberToBool(src), nil
+		}
 	}
 
 	if checkIsNumberAndString(srcKindType, destKindType) {
@@ -35,6 +53,21 @@ func ConvertBasicTypeData(src interface{}, dest interface{}) (interface{}, error
 	}
 
 	return nil, fmt.Errorf("unknow error")
+}
+
+func convertStringToBool(str string) bool {
+	str = strings.ToLower(str)
+	if str == "t" || str == "true" {
+		return true
+	}
+	return false
+}
+
+func convertBoolToString(br bool) string {
+	if br {
+		return "true"
+	}
+	return "false"
 }
 
 func convertStringToNumber(src string, dest interface{}) (interface{}, error) {
@@ -229,5 +262,151 @@ func convertFloatToNumber(fval float64, dest interface{}) (interface{}, error) {
 		return uint(fval), nil
 	default:
 		return nil, fmt.Errorf("unsupport type")
+	}
+}
+
+func convertBoolToNumber(src bool, dest interface{}) (interface{}, error) {
+	switch dest.(type) {
+	case float32:
+		if src {
+			return float32(1), nil
+		} else {
+			return float32(0), nil
+		}
+	case float64:
+		if src {
+			return float64(1), nil
+		} else {
+			return float64(0), nil
+		}
+	case int8:
+		if src {
+			return int8(1), nil
+		} else {
+			return int8(0), nil
+		}
+	case int16:
+		if src {
+			return int16(1), nil
+		} else {
+			return int16(0), nil
+		}
+	case int32:
+		if src {
+			return int32(1), nil
+		} else {
+			return int32(0), nil
+		}
+	case int64:
+		if src {
+			return int64(1), nil
+		} else {
+			return int64(0), nil
+		}
+	case int:
+		if src {
+			return int(1), nil
+		} else {
+			return int(0), nil
+		}
+	case uint8:
+		if src {
+			return uint8(1), nil
+		} else {
+			return uint8(0), nil
+		}
+	case uint16:
+		if src {
+			return uint16(1), nil
+		} else {
+			return uint16(0), nil
+		}
+	case uint32:
+		if src {
+			return uint32(1), nil
+		} else {
+			return uint32(0), nil
+		}
+	case uint64:
+		if src {
+			return uint64(1), nil
+		} else {
+			return uint64(0), nil
+		}
+	case uint:
+		if src {
+			return uint(1), nil
+		} else {
+			return uint(0), nil
+		}
+	default:
+		return nil, fmt.Errorf("unsupport type")
+	}
+}
+
+func convertNumberToBool(src interface{}) bool {
+	switch src.(type) {
+	case float32:
+		if math.Abs(float64(src.(float32))) < numberic_min_threshold {
+			return false
+		}
+		return true
+	case float64:
+		if math.Abs(src.(float64)) < numberic_min_threshold {
+			return false
+		}
+		return true
+	case int8:
+		if src.(int8) == 0 {
+			return false
+		}
+		return true
+	case int16:
+		if src.(int16) == 0 {
+			return false
+		}
+		return true
+	case int32:
+		if src.(int32) == 0 {
+			return false
+		}
+		return true
+	case int64:
+		if src.(int64) == 0 {
+			return false
+		}
+		return true
+	case int:
+		if src.(int) == 0 {
+			return false
+		}
+		return true
+	case uint8:
+		if src.(uint8) == 0 {
+			return false
+		}
+		return true
+	case uint16:
+		if src.(uint16) == 0 {
+			return false
+		}
+		return true
+	case uint32:
+		if src.(uint32) == 0 {
+			return false
+		}
+		return true
+	case uint64:
+		if src.(uint64) == 0 {
+			return false
+		}
+		return true
+	case uint:
+		if src.(uint) == 0 {
+			return false
+		}
+		return true
+	default:
+		return false
 	}
 }

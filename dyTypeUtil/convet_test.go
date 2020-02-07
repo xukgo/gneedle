@@ -943,3 +943,164 @@ func Test_Convert_uint_uint(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func Test_Convert_bool_string(t *testing.T) {
+	val, err := ConvertBasicTypeData(true, "")
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, "true") {
+		t.Fail()
+	}
+
+	val, err = ConvertBasicTypeData(false, "")
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, "false") {
+		t.Fail()
+	}
+}
+
+func Test_Convert_string_bool(t *testing.T) {
+	val, err := ConvertBasicTypeData("true", true)
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, true) {
+		t.Fail()
+	}
+
+	val, err = ConvertBasicTypeData("True", true)
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, true) {
+		t.Fail()
+	}
+	val, err = ConvertBasicTypeData("t", true)
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, true) {
+		t.Fail()
+	}
+	val, err = ConvertBasicTypeData("T", true)
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, true) {
+		t.Fail()
+	}
+
+	val, err = ConvertBasicTypeData("false", true)
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, false) {
+		t.Fail()
+	}
+
+	val, err = ConvertBasicTypeData("False", true)
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, false) {
+		t.Fail()
+	}
+	val, err = ConvertBasicTypeData("f", true)
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, false) {
+		t.Fail()
+	}
+}
+
+func Test_Convert_bool_uint(t *testing.T) {
+	val, err := ConvertBasicTypeData(true, uint(1))
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, 1) {
+		t.Fail()
+	}
+
+	val, err = ConvertBasicTypeData(false, uint(1))
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, 0) {
+		t.Fail()
+	}
+}
+
+func Test_Convert_bool_int(t *testing.T) {
+	val, err := ConvertBasicTypeData(true, int(1))
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, 1) {
+		t.Fail()
+	}
+
+	val, err = ConvertBasicTypeData(false, int(1))
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, 0) {
+		t.Fail()
+	}
+}
+
+func Test_Convert_int_bool(t *testing.T) {
+	val, err := ConvertBasicTypeData(1, true)
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, true) {
+		t.Fail()
+	}
+
+	val, err = ConvertBasicTypeData(0, true)
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, false) {
+		t.Fail()
+	}
+
+	val, err = ConvertBasicTypeData(-1, true)
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, true) {
+		t.Fail()
+	}
+}
+
+func Test_Convert_float_bool(t *testing.T) {
+	val, err := ConvertBasicTypeData(1.00, true)
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, true) {
+		t.Fail()
+	}
+
+	val, err = ConvertBasicTypeData(0.00, true)
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, false) {
+		t.Fail()
+	}
+
+	val, err = ConvertBasicTypeData(-1.125, true)
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, true) {
+		t.Fail()
+	}
+}
