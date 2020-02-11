@@ -9,7 +9,7 @@ import (
 
 const numberic_min_threshold float64 = 0.01
 
-func checkIsBoolAndString(t1 int, t2 int) bool {
+func checkIsBoolAndString(t1 int64, t2 int64) bool {
 	if t1 == BOOL_TYPE && t2 == STRING_TYPE {
 		return true
 	}
@@ -19,7 +19,7 @@ func checkIsBoolAndString(t1 int, t2 int) bool {
 	return false
 }
 
-func checkIsBoolAndNumber(t1 int, t2 int) bool {
+func checkIsBoolAndNumber(t1 int64, t2 int64) bool {
 	if t1 == BOOL_TYPE && t2 == NUMBER_TYPE {
 		return true
 	}
@@ -29,7 +29,7 @@ func checkIsBoolAndNumber(t1 int, t2 int) bool {
 	return false
 }
 
-func checkIsNumberAndString(t1 int, t2 int) bool {
+func checkIsNumberAndString(t1 int64, t2 int64) bool {
 	if t1 == STRING_TYPE && t2 == NUMBER_TYPE {
 		return true
 	}
@@ -39,7 +39,7 @@ func checkIsNumberAndString(t1 int, t2 int) bool {
 	return false
 }
 
-func checkIsStringAndBytes(t1 int, t2 int) bool {
+func checkIsStringAndBytes(t1 int64, t2 int64) bool {
 	if t1 == STRING_TYPE && t2 == BYTEARRAY_TYPE {
 		return true
 	}
@@ -49,7 +49,7 @@ func checkIsStringAndBytes(t1 int, t2 int) bool {
 	return false
 }
 
-func checkIsNumber(t1 int, t2 int) bool {
+func checkIsNumber(t1 int64, t2 int64) bool {
 	if t1 == NUMBER_TYPE && t2 == NUMBER_TYPE {
 		return true
 	}

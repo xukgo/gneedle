@@ -4,8 +4,70 @@ import (
 	"fmt"
 	"math"
 	"strconv"
-	"strings"
 )
+
+var DEFAULT_EMPTY_BYTESLICE = make([]byte,0)
+
+func ConvertToString(src interface{})(string,error){
+	v,err := ConvertBasicTypeData(src,"")
+	if err != nil{
+		return "",err
+	}
+	return v.(string),nil
+}
+//func ConvertToByteArray(src interface{})([]byte,error){
+//	v,err := ConvertBasicTypeData(src, DEFAULT_EMPTY_BYTESLICE)
+//	if err != nil{
+//		return nil,err
+//	}
+//	return v.([]byte),nil
+//}
+
+func ConvertToBool(src interface{})(bool,error){
+	v,err := ConvertBasicTypeData(src,true)
+	if err != nil{
+		return false,err
+	}
+	return v.(bool),nil
+}
+
+func ConvertToInt(src interface{})(int,error){
+	v,err := ConvertBasicTypeData(src,int(0))
+	if err != nil{
+		return 0,err
+	}
+	return v.(int),nil
+}
+
+func ConvertToInt64(src interface{})(int64,error){
+	v,err := ConvertBasicTypeData(src,int64(0))
+	if err != nil{
+		return 0,err
+	}
+	return v.(int64),nil
+}
+
+func ConvertToUint64(src interface{})(uint64,error){
+	v,err := ConvertBasicTypeData(src,uint64(0))
+	if err != nil{
+		return 0,err
+	}
+	return v.(uint64),nil
+}
+func ConvertToFloat32(src interface{})(float32,error){
+	v,err := ConvertBasicTypeData(src,float32(0))
+	if err != nil{
+		return 0,err
+	}
+	return v.(float32),nil
+}
+func ConvertToFloat64(src interface{})(float64,error){
+	v,err := ConvertBasicTypeData(src,float64(0))
+	if err != nil{
+		return 0,err
+	}
+	return v.(float64),nil
+}
 
 //支持基础数据类型自动转换，不支持 byteArray，只支持数值和string/bool
 func ConvertBasicTypeData(src interface{}, dest interface{}) (interface{}, error) {
@@ -16,11 +78,11 @@ func ConvertBasicTypeData(src interface{}, dest interface{}) (interface{}, error
 	}
 
 	srcKindType := getValueKindType(src)
-	if srcKindType == UNSUPPORT_TYPE || srcKindType == BYTEARRAY_TYPE {
+	if srcKindType >= UNSUPPORT_TYPE || srcKindType == BYTEARRAY_TYPE {
 		return nil, fmt.Errorf("unsupport type")
 	}
 	destKindType := getValueKindType(dest)
-	if destKindType == UNSUPPORT_TYPE || destKindType == BYTEARRAY_TYPE {
+	if destKindType >= UNSUPPORT_TYPE || destKindType == BYTEARRAY_TYPE {
 		return nil, fmt.Errorf("unsupport type")
 	}
 
@@ -56,11 +118,29 @@ func ConvertBasicTypeData(src interface{}, dest interface{}) (interface{}, error
 }
 
 func convertStringToBool(str string) bool {
-	str = strings.ToLower(str)
-	if str == "t" || str == "true" {
+	slen := len(str)
+	if slen == 1{
+		if str[0] == 't' || str[0] == 'T'{
+			return true
+		}
+		return false
+	}else if slen == 4{
+		if str[0] != 't' && str[0] != 'T'{
+			return false
+		}
+		if str[1] != 'r' && str[1] != 'R'{
+			return false
+		}
+		if str[2] != 'u' && str[2] != 'U'{
+			return false
+		}
+		if str[3] != 'e' && str[3] != 'E'{
+			return false
+		}
 		return true
+	}else {
+		return false
 	}
-	return false
 }
 
 func convertBoolToString(br bool) string {

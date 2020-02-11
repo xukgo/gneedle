@@ -13,11 +13,11 @@ func Equal(src interface{}, dest interface{}) bool {
 	}
 
 	srcKindType := getValueKindType(src)
-	if srcKindType == UNSUPPORT_TYPE {
+	if srcKindType >= UNSUPPORT_TYPE {
 		return false
 	}
 	destKindType := getValueKindType(dest)
-	if destKindType == UNSUPPORT_TYPE {
+	if destKindType >= UNSUPPORT_TYPE {
 		return false
 	}
 
