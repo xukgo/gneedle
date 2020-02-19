@@ -15,6 +15,9 @@ func Benchmark_GetClassPath(b *testing.B) {
 	model := new(cominfo)
 
 	for i := 0; i < b.N; i++ {
-		(voluator.GetClassPath(model))
+		path :=(voluator.GetClassPath(model))
+		if len(path) == 0{
+			b.Fail()
+		}
 	}
 }

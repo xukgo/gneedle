@@ -53,7 +53,7 @@ func assignByPaths(instance interface{}, paths []string, val interface{}) (bool,
 		}
 
 		flagName := getFieldFlagName(fieldInfo)
-		if strings.ToLower(flagName) == strings.ToLower(paths[0]) {
+		if strings.EqualFold(flagName,paths[0]) {
 			acField := elem.Field(i)
 			ptrElem := getValuePtr(acField)
 			if len(paths) == 1 {

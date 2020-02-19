@@ -13,16 +13,34 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 )
+
+var classPathPool = &sync.Pool{
+	New: func() interface{} {
+		return make([]byte,0,128)
+	},
+}
 
 func combindPathString(pkg, name string)string{
 	len1 := len(pkg)
 	len2 := len(name)
-	buff := make([]byte,len1+len2+1)
+	expectLen := len1+len2+1
+
+	//buff := classPathPool.Get().([]byte)
+	//if len(buff) < expectLen{
+	//	buff = make([]byte,expectLen)
+	//}
+	buff := make([]byte,expectLen)
+
 	copy(buff, pkg)
 	buff[len1] = '.'
 	copy(buff[len1+1:], name)
-	return string(buff)
+	path :=  string(buff)
+
+	//buff = buff[:0]
+	//classPathPool.Put(buff)
+	return path
 }
 
 func GetClassPath(v interface{}) string {

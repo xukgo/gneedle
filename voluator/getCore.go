@@ -54,7 +54,7 @@ func getByPaths(v interface{}, paths []string) (bool, interface{}) {
 
 		flagName := getFieldFlagName(fieldInfo)
 		flag, sliceIdx := getFlagAndSliceIndex(paths[0])
-		if strings.ToLower(flagName) == strings.ToLower(flag) {
+		if strings.EqualFold(flagName,flag) {
 			subFiled := elem.Field(i)
 			var fins interface{}
 			if sliceIdx >= 0 { //处理slice的

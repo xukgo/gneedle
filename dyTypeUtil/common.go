@@ -97,13 +97,13 @@ func equalBoolAndString(src interface{}, dest interface{}) bool {
 		return false
 	}
 	if br {
-		if str == "1" || strings.ToLower(str) == "true" {
+		if str == "1" || strings.EqualFold(str,"true") {
 			return true
 		} else {
 			return false
 		}
 	} else {
-		if str == "0" || strings.ToLower(str) == "false" {
+		if str == "0" || strings.EqualFold(str,"false") {
 			return true
 		} else {
 			return false
