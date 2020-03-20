@@ -97,8 +97,17 @@ func assignFieldValue(value reflect.Value, field *reflect.StructField, setVal in
 	}
 	//fmt.Println("offset", field.Offset)
 	//fmt.Println("PkgPath", field.PkgPath)
-	targetValue := reflect.ValueOf(setVal)
-	targetValType := targetValue.Type()
+
+	var targetValue reflect.Value
+	var targetValType reflect.Type
+	if setVal == nil{
+		targetValue = reflect.Zero(field.Type)
+		value.Set(targetValue)
+		return nil
+	}else{
+		targetValue = reflect.ValueOf(setVal)
+		targetValType = targetValue.Type()
+	}
 
 	//fmt.Println(targetValType)
 	//fmt.Println(field.Type)

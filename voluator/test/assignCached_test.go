@@ -15,6 +15,17 @@ func TestValAssignOneLayerStringCached(t *testing.T) {
 	var find bool
 	var err error
 	target := new(rootResponse)
+	find, err = voluator.AssignValue(target, "data", nil, true)
+	if !find {
+		t.Fail()
+	}
+	if err != nil {
+		t.Error(err)
+	}
+	if target.Data != "" {
+		t.Fail()
+	}
+
 	find, err = voluator.AssignValue(target, "data", []byte("helloworld"), true)
 	if !find {
 		t.Fail()
@@ -291,7 +302,18 @@ func TestValAssignStringSliceCached(t *testing.T) {
 	var find bool
 	var err error
 	target := new(rootResponse)
-	find, err = voluator.AssignValue(target, "sa", []string{"aaa", "bbb", "ccc"}, true)
+	find, err = voluator.AssignValue(target, "sa", nil, true)
+	if !find {
+		t.Fail()
+	}
+	if err != nil {
+		t.Error(err)
+	}
+	if len(target.StrArr) >0{
+		t.Fail()
+	}
+
+		find, err = voluator.AssignValue(target, "sa", []string{"aaa", "bbb", "ccc"}, true)
 	if !find {
 		t.Fail()
 	}

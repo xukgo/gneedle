@@ -18,6 +18,17 @@ func TestSetNestVal1(t *testing.T) {
 		Info:       wrapinfo,
 	}
 
+	find, err = voluator.AssignValue(target, "data", nil, false)
+	if !find {
+		t.Fail()
+	}
+	if err != nil {
+		t.Error(err)
+	}
+	if target.Data != "" {
+		t.Fail()
+	}
+
 	find, err = voluator.AssignValue(target, "data", "123abc", false)
 	if !find {
 		t.Fail()

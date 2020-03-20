@@ -8,6 +8,7 @@ package test
 
 import (
 	"github.com/xukgo/gneedle/voluator"
+	"math"
 	"testing"
 )
 
@@ -15,6 +16,17 @@ func TestValAssignOneLayerString(t *testing.T) {
 	var find bool
 	var err error
 	target := new(rootResponse)
+	find, err = voluator.AssignValue(target, "data", nil, false)
+	if !find {
+		t.Fail()
+	}
+	if err != nil {
+		t.Error(err)
+	}
+	if target.Data != "" {
+		t.Fail()
+	}
+
 	find, err = voluator.AssignValue(target, "data", []byte("helloworld"), false)
 	if !find {
 		t.Fail()
@@ -119,6 +131,17 @@ func TestValAssignOneLayerInt(t *testing.T) {
 	var find bool
 	var err error
 	target := new(rootResponse)
+	find, err = voluator.AssignValue(target, "id", nil, false)
+	if !find {
+		t.Fail()
+	}
+	if err != nil {
+		t.Error(err)
+	}
+	if target.ID != 0{
+		t.Fail()
+	}
+
 	find, err = voluator.AssignValue(target, "id", "123", false)
 	if !find {
 		t.Fail()
@@ -190,6 +213,17 @@ func TestValAssignOneLayerFloat(t *testing.T) {
 	var find bool
 	var err error
 	target := new(rootResponse)
+	find, err = voluator.AssignValue(target, "gap", nil, false)
+	if !find {
+		t.Fail()
+	}
+	if err != nil {
+		t.Error(err)
+	}
+	if math.Abs(float64(target.Gap))  >= 0.00001 {
+		t.Fail()
+	}
+
 	find, err = voluator.AssignValue(target, "gap", "-998.897", false)
 	if !find {
 		t.Fail()
@@ -275,6 +309,17 @@ func TestValAssignMultiLayer(t *testing.T) {
 	}
 
 	target := new(rootResponse)
+	find, err = voluator.AssignValue(target, "subject.application.AppName", nil, false)
+	if !find {
+		t.Fail()
+	}
+	if err != nil {
+		t.Error(err)
+	}
+	if target.Subject.ApplicationInfo.AppName != "" {
+		t.Fail()
+	}
+
 	find, err = voluator.AssignValue(target, "subject.application.AppName", 12.34, false)
 	if !find {
 		t.Fail()
@@ -291,7 +336,18 @@ func TestValAssignStringSlice(t *testing.T) {
 	var find bool
 	var err error
 	target := new(rootResponse)
-	find, err = voluator.AssignValue(target, "sa", []string{"aaa", "bbb", "ccc"}, false)
+	find, err = voluator.AssignValue(target, "sa", nil, false)
+	if !find {
+		t.Fail()
+	}
+	if err != nil {
+		t.Error(err)
+	}
+	if len(target.StrArr) > 0{
+		t.Fail()
+	}
+
+		find, err = voluator.AssignValue(target, "sa", []string{"aaa", "bbb", "ccc"}, false)
 	if !find {
 		t.Fail()
 	}
