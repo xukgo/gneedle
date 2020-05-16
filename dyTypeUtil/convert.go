@@ -153,7 +153,11 @@ func convertBoolToString(br bool) string {
 func convertStringToNumber(src string, dest interface{}) (interface{}, error) {
 	switch dest.(type) {
 	case float32:
-		return strconv.ParseFloat(src, 32)
+		val, err :=  strconv.ParseFloat(src, 32)
+		if err != nil {
+			return nil, err
+		}
+		return float32(val), nil
 	case float64:
 		return strconv.ParseFloat(src, 64)
 	case int8:
