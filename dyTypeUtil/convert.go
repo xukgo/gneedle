@@ -78,12 +78,28 @@ func ConvertBasicTypeData(src interface{}, dest interface{}) (interface{}, error
 	}
 
 	srcKindType := getValueKindType(src)
-	if srcKindType >= UNSUPPORT_TYPE || srcKindType == BYTEARRAY_TYPE {
+	if srcKindType >= UNSUPPORT_TYPE{
 		return nil, fmt.Errorf("unsupport type")
 	}
 	destKindType := getValueKindType(dest)
-	if destKindType >= UNSUPPORT_TYPE || destKindType == BYTEARRAY_TYPE {
+	if destKindType >= UNSUPPORT_TYPE{
 		return nil, fmt.Errorf("unsupport type")
+	}
+
+	//byteArray只允许和string转换
+	if srcKindType == BYTEARRAY_TYPE && destKindType != STRING_TYPE{
+		return nil, fmt.Errorf("unsupport type")
+	}
+	if destKindType == BYTEARRAY_TYPE && srcKindType != STRING_TYPE{
+		return nil, fmt.Errorf("unsupport type")
+	}
+
+	if checkIsStringAndBytes(srcKindType, destKindType) {
+		if srcKindType == BYTEARRAY_TYPE {
+			return converBytesToString(src.([]byte)), nil
+		} else {
+			return convertStringToBytes(src.(string)), nil
+		}
 	}
 
 	if checkIsBoolAndString(srcKindType, destKindType) {
@@ -115,6 +131,17 @@ func ConvertBasicTypeData(src interface{}, dest interface{}) (interface{}, error
 	}
 
 	return nil, fmt.Errorf("unknow error")
+}
+
+func convertStringToBytes(s string) []byte {
+	return []byte(s)
+}
+
+func converBytesToString(bytes []byte) string {
+	if len(bytes) == 0{
+		return ""
+	}
+	return string(bytes)
 }
 
 func convertStringToBool(str string) bool {
