@@ -27,6 +27,9 @@ func getValueKindType(v interface{}) int64 {
 
 func getKind(v interface{}) reflect.Kind {
 	elem := reflect.ValueOf(v)
+	if elem.Kind()== reflect.Invalid{
+		return reflect.Invalid
+	}
 	//fmt.Println(elem)
 	elemType := elem.Type()
 	//fmt.Println(elemType)

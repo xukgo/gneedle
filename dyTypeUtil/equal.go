@@ -9,7 +9,33 @@ func Equal(src interface{}, dest interface{}) bool {
 
 	//类型一样直接匹配，除非是浮点数，因为浮点判断是算最小差
 	if srcKind == destKind && srcKind != reflect.Float32 && srcKind != reflect.Float64 {
+		//if srcKind == reflect.Interface || srcKind == reflect.Ptr|| srcKind == reflect.Slice|| srcKind == reflect.Map{
+		//	br1 := reflect.ValueOf(src).IsNil()
+		//	br2 := reflect.ValueOf(dest).IsNil()
+		//	if br1 == br2{
+		//		return true
+		//	}
+		//}
 		return src == dest
+	}
+
+	if srcKind == reflect.Invalid{
+		rval := reflect.Zero(reflect.TypeOf(dest))
+		ri := rval.Interface()
+		kt := getValueKindType(dest)
+		if kt >= UNSUPPORT_TYPE && (destKind != reflect.Interface && destKind != reflect.Ptr&& destKind != reflect.Slice&& destKind != reflect.Map ){
+			return false
+		}
+		return Equal(ri,dest)
+	}
+	if destKind == reflect.Invalid{
+		rval := reflect.Zero(reflect.TypeOf(src))
+		ri := rval.Interface()
+		kt := getValueKindType(src)
+		if kt >= UNSUPPORT_TYPE && (srcKind != reflect.Interface && srcKind != reflect.Ptr&& srcKind != reflect.Slice&& srcKind != reflect.Map ){
+			return false
+		}
+		return Equal(src,ri)
 	}
 
 	srcKindType := getValueKindType(src)

@@ -5,6 +5,47 @@ import (
 	"testing"
 )
 
+func TestEqualNil(t *testing.T) {
+	var actual bool
+	actual = Equal("", nil)
+	if !actual {
+		t.FailNow()
+	}
+	actual = Equal(nil,"")
+	if !actual {
+		t.FailNow()
+	}
+	actual = Equal(0, nil)
+	if !actual {
+		t.FailNow()
+	}
+	actual = Equal( nil,0)
+	if !actual {
+		t.FailNow()
+	}
+	actual = Equal(0.000, nil)
+	if !actual {
+		t.FailNow()
+	}
+	actual = Equal(false, nil)
+	if !actual {
+		t.FailNow()
+	}
+	actual = Equal(sync.RWMutex{}, nil)
+	if actual {
+		t.FailNow()
+	}
+	var lk *sync.RWMutex = nil
+	actual = Equal(lk, nil)
+	if !actual {
+		t.FailNow()
+	}
+	actual = Equal( nil,lk)
+	if !actual {
+		t.FailNow()
+	}
+}
+
 func TestEqualPoint(t *testing.T) {
 	var actual bool
 	p := &sync.Map{}
