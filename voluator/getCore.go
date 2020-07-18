@@ -81,3 +81,20 @@ func getByPaths(v interface{}, paths []string) (bool, interface{}) {
 
 	return false, nil
 }
+
+func GetSliceIndexItem(arr interface{}, index int)(interface{},bool){
+	if arr == nil || index < 0{
+		return nil,false
+	}
+	elem := reflect.ValueOf(arr)
+	//elemKind := elem.Kind()
+	//处理slice类型的
+	clen := elem.Len()
+	if index >=  clen{
+		return nil, false
+	}
+
+	var fins interface{}
+	fins = elem.Index(index).Interface()
+	return fins,true
+}

@@ -57,6 +57,52 @@ func intReponseModel() rootResponse {
 	return model
 }
 
+func TestGetSliceItem(t *testing.T) {
+	var arr []string
+	val,find := voluator.GetSliceIndexItem(arr,0)
+	if find{
+		t.FailNow()
+	}
+
+	val,find = voluator.GetSliceIndexItem(arr,-1)
+	if find{
+		t.FailNow()
+	}
+	val,find = voluator.GetSliceIndexItem(arr,1)
+	if find{
+		t.FailNow()
+	}
+	val,find = voluator.GetSliceIndexItem(nil,-1)
+	if find{
+		t.FailNow()
+	}
+	val,find = voluator.GetSliceIndexItem(nil,0)
+	if find{
+		t.FailNow()
+	}
+	val,find = voluator.GetSliceIndexItem(nil,1)
+	if find{
+		t.FailNow()
+	}
+
+	arr = []string{"0","1","2"}
+	val,find = voluator.GetSliceIndexItem(arr,0)
+	if val != "0"{
+		t.FailNow()
+	}
+	val,find = voluator.GetSliceIndexItem(arr,1)
+	if val != "1"{
+		t.FailNow()
+	}
+	val,find = voluator.GetSliceIndexItem(arr,2)
+	if val != "2"{
+		t.FailNow()
+	}
+	val,find = voluator.GetSliceIndexItem(arr,3)
+	if find{
+		t.FailNow()
+	}
+}
 func TestGetOneLayer(t *testing.T) {
 	var find bool
 	var actual interface{}
