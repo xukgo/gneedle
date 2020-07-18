@@ -7,6 +7,10 @@ import (
 
 func TestEqualNil(t *testing.T) {
 	var actual bool
+	actual = Equal(nil, nil)
+	if !actual {
+		t.FailNow()
+	}
 	actual = Equal("", nil)
 	if !actual {
 		t.FailNow()
