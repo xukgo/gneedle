@@ -36,7 +36,8 @@ func assignByPaths(instance interface{}, paths []string, val interface{}) (bool,
 	elem = elem.Elem()
 	elemType := elem.Type()
 
-	for i := 0; i < elem.NumField(); i++ {
+	fieldCount := elem.NumField()
+	for i := 0; i < fieldCount; i++ {
 		fieldInfo := elemType.Field(i)
 		if fieldInfo.Anonymous {
 			acField := elem.Field(i)
@@ -55,7 +56,6 @@ func assignByPaths(instance interface{}, paths []string, val interface{}) (bool,
 		flagName := getFieldFlagName(fieldInfo)
 		if strings.EqualFold(flagName,paths[0]) {
 			acField := elem.Field(i)
-			ptrElem := getValuePtr(acField)
 			if len(paths) == 1 {
 				err := assignFieldValue(acField, &fieldInfo, val)
 				if err != nil {
@@ -63,6 +63,7 @@ func assignByPaths(instance interface{}, paths []string, val interface{}) (bool,
 				}
 				return true, nil
 			} else {
+				ptrElem := getValuePtr(acField)
 				return assignByPaths(ptrElem, paths[1:], val)
 			}
 		}

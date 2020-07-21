@@ -47,7 +47,8 @@ func initPathCache(v interface{}) {
 	elemType := elem.Type()
 
 	dict := make(map[string]MinorPath)
-	for i := 0; i < elem.NumField(); i++ {
+	fieldCount := elem.NumField()
+	for i := 0; i < fieldCount; i++ {
 		fieldInfo := elemType.Field(i)
 		if fieldInfo.Anonymous {
 			initPathCache(elem.Field(i).Interface())
@@ -56,21 +57,35 @@ func initPathCache(v interface{}) {
 			continue
 		}
 
-		var fins interface{} = nil
 		subFiled := elem.Field(i)
 		//slice处理
-		if fieldInfo.Type.Kind() == reflect.Slice {
-			SubCount := subFiled.Len()
-			if SubCount > 0 {
-				fins = subFiled.Index(0).Interface()
+		if subFiled.CanSet(){
+			var fins interface{} = nil
+			k := fieldInfo.Type.Kind()
+			if k == reflect.Slice {
+				SubCount := subFiled.Len()
+				if SubCount > 0 {
+					fins = subFiled.Index(0).Interface()
+				}
+			} else {
+				fins = subFiled.Interface()
+				//if k== reflect.Ptr{
+				//	fins = subFiled.Interface()
+				//}else if k== reflect.Struct{
+				//	fins = reflect.New(fieldInfo.Type).Interface()
+				//	//fins = subFiled.Type().Elem()
+				//}else{
+				//	fins = nil
+				//}
 			}
-		} else {
-			fins = subFiled.Interface()
-		}
-		if fins != nil {
-			initPathCache(fins)
+			if fins != nil {
+				initPathCache(fins)
+			}
 		}
 		flagName := getFieldFlagName(fieldInfo)
+		if len(flagName) == 0{
+			continue
+		}
 		minorPath := NewMinorPath(i)
 		dict[flagName] = minorPath
 	}
@@ -78,6 +93,14 @@ func initPathCache(v interface{}) {
 	pathCacheDict.Store(instanceClassPath, dict)
 	//fmt.Println("struct name:", key)
 	//fmt.Println("struct children:", dict)
+}
+
+func checkKindSubPathContinue(k reflect.Kind) bool {
+	if k == reflect.Ptr ||k == reflect.Struct||k == reflect.Slice{
+		return true
+	}
+	return false
+
 }
 
 func lockLoadPathMap(instance interface{}) map[string]MinorPath {
