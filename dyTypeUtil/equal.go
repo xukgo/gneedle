@@ -1,6 +1,9 @@
 package dyTypeUtil
 
-import "reflect"
+import (
+	"reflect"
+	"strings"
+)
 
 //动态判断是否匹配，基础数据类型自动转换，
 func Equal(src interface{}, dest interface{}) bool {
@@ -72,9 +75,23 @@ func Equal(src interface{}, dest interface{}) bool {
 
 	if checkIsNumberAndString(srcKindType, destKindType) {
 		if srcKindType == NUMBER_TYPE {
-			return equalNumberAndString(src, dest)
+			str := dest.(string)
+			if strings.EqualFold(str,"true"){
+				return equalNumber(src, 1)
+			}else if strings.EqualFold(str,"false"){
+				return equalNumber(src, 0)
+			}else{
+				return equalNumberAndString(src, dest)
+			}
 		} else {
-			return equalNumberAndString(dest, src)
+			str := src.(string)
+			if strings.EqualFold(str,"true"){
+				return equalNumber(1,dest)
+			}else if strings.EqualFold(str,"false"){
+				return equalNumber(0,dest)
+			}else{
+				return equalNumberAndString(dest, src)
+			}
 		}
 	}
 

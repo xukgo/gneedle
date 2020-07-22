@@ -232,6 +232,22 @@ func TestEqualNumber(t *testing.T) {
 
 func TestEqualNumberString(t *testing.T) {
 	var actual bool
+	actual = Equal("True", 1)
+	if !actual {
+		t.Fail()
+	}
+	actual = Equal("False", 0)
+	if !actual {
+		t.Fail()
+	}
+	actual = Equal(1,"True")
+	if !actual {
+		t.Fail()
+	}
+	actual = Equal(0,"False")
+	if !actual {
+		t.Fail()
+	}
 	actual = Equal("123", int8(123))
 	if !actual {
 		t.Fail()
