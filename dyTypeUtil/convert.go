@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"strconv"
+	"strings"
 )
 
 var DEFAULT_EMPTY_BYTESLICE = make([]byte,0)
@@ -178,6 +179,12 @@ func convertBoolToString(br bool) string {
 }
 
 func convertStringToNumber(src string, dest interface{}) (interface{}, error) {
+	if strings.EqualFold(src,"true"){
+		src = "1"
+	}else if strings.EqualFold(src,"false"){
+		src = "0"
+	}
+
 	switch dest.(type) {
 	case float32:
 		val, err :=  strconv.ParseFloat(src, 32)

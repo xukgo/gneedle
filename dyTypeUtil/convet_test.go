@@ -1104,3 +1104,36 @@ func Test_Convert_float_bool(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func Test_Convert_string_int(t *testing.T) {
+	val, err := ConvertBasicTypeData("true", 1)
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, 1) {
+		t.Fail()
+	}
+
+	val, err = ConvertBasicTypeData("True", 1)
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, 1) {
+		t.Fail()
+	}
+	val, err = ConvertBasicTypeData("false", 0)
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, 0) {
+		t.Fail()
+	}
+
+	val, err = ConvertBasicTypeData("fAlse", 0)
+	if err != nil {
+		t.Fail()
+	}
+	if !Equal(val, 0) {
+		t.Fail()
+	}
+}
