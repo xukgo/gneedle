@@ -19,6 +19,12 @@ func Equal(src interface{}, dest interface{}) bool {
 		//		return true
 		//	}
 		//}
+		if srcKind == reflect.Slice{
+			if reflect.ValueOf(src).Len() ==reflect.ValueOf(dest).Len(){
+				return true
+			}
+			return false
+		}
 		return src == dest
 	}
 

@@ -11,6 +11,14 @@ func TestEqualNil(t *testing.T) {
 	if !actual {
 		t.FailNow()
 	}
+	actual = Equal([]string{}, nil)
+	if !actual {
+		t.FailNow()
+	}
+	actual = Equal([]string{"1","2"}, nil)
+	if actual {
+		t.FailNow()
+	}
 	actual = Equal("", nil)
 	if !actual {
 		t.FailNow()
