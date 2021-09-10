@@ -11,11 +11,29 @@ func TestEqualNil(t *testing.T) {
 	if !actual {
 		t.FailNow()
 	}
-	actual = Equal([]string{}, nil)
+
+	var sarr []string = nil
+	actual = Equal(sarr, nil)
 	if !actual {
 		t.FailNow()
 	}
+	sarr = make([]string,0)
+	actual = Equal(sarr, nil)
+	if actual {
+		t.FailNow()
+	}
 	actual = Equal([]string{"1","2"}, nil)
+	if actual {
+		t.FailNow()
+	}
+
+	var dict map[int]int = nil
+	actual = Equal(dict, nil)
+	if !actual {
+		t.FailNow()
+	}
+	dict = make(map[int]int)
+	actual = Equal(dict, nil)
 	if actual {
 		t.FailNow()
 	}

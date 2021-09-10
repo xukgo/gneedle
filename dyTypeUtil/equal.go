@@ -5,6 +5,20 @@ import (
 	"strings"
 )
 
+func InterfaceIsNil(i interface{}) bool {
+	vi := reflect.ValueOf(i)
+	kind := vi.Kind()
+	if kind == reflect.Ptr {
+		return vi.IsNil()
+	} else if kind == reflect.Map {
+		return vi.IsNil()
+	} else if kind == reflect.Slice {
+		return vi.IsNil()
+	}
+	return false
+}
+
+
 //动态判断是否匹配，基础数据类型自动转换，
 func Equal(src interface{}, dest interface{}) bool {
 	srcKind := getKind(src)
@@ -32,6 +46,9 @@ func Equal(src interface{}, dest interface{}) bool {
 		rval := reflect.Zero(reflect.TypeOf(dest))
 		ri := rval.Interface()
 		kt := getValueKindType(dest)
+		if destKind == reflect.Map || destKind == reflect.Slice {
+			return InterfaceIsNil(dest)
+		}
 		if kt >= UNSUPPORT_TYPE && (destKind != reflect.Interface && destKind != reflect.Ptr&& destKind != reflect.Slice&& destKind != reflect.Map ){
 			return false
 		}
@@ -41,6 +58,9 @@ func Equal(src interface{}, dest interface{}) bool {
 		rval := reflect.Zero(reflect.TypeOf(src))
 		ri := rval.Interface()
 		kt := getValueKindType(src)
+		if srcKind == reflect.Map || srcKind == reflect.Slice {
+			return InterfaceIsNil(src)
+		}
 		if kt >= UNSUPPORT_TYPE && (srcKind != reflect.Interface && srcKind != reflect.Ptr&& srcKind != reflect.Slice&& srcKind != reflect.Map ){
 			return false
 		}
